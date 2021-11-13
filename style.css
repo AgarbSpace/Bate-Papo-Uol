@@ -104,6 +104,8 @@ button{
     height: 507px;
 
     margin-top: 26px;
+
+    overflow-y: scroll;
 }
 
 .menuContatos{
