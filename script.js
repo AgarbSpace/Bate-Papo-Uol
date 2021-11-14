@@ -1,3 +1,6 @@
+const todasMensagens = [];
+const nomeInserido = "";
+
 function menuContatosAparece(){
     const menuAparece = document.querySelector(".menuContatos");
     menuAparece.classList.remove("none");
@@ -14,7 +17,7 @@ function colocaNone(){
 }
 
 function pegarNome(){
-    const nomeInserido = document.querySelector(".nomeTelaInicial")
+    nomeInserido = document.querySelector(".nomeTelaInicial")
     const name = {
         name: nomeInserido.value
     }
@@ -26,7 +29,7 @@ function pegarNome(){
 }
 
 function conexao(){
-    const nomeInserido = document.querySelector(".nomeTelaInicial")
+   nomeInserido = document.querySelector(".nomeTelaInicial")
     const name = {
         name: nomeInserido.value
     }
@@ -59,5 +62,41 @@ function tratarErro(erro){
 function buscarMensagens(){
     const promessa = axios.get('https://mock-api.driven.com.br/api/v4/uol/messages');
 
+    console.log(promessa);
+    promessa.then(receberDados);
+    promessa.catch(erroAoPegarMensagens);
+}
 
+function receberDados(resposta){
+    console.log(resposta.data);
+    mensagensDoServidor(resposta.data);
+}
+
+function mensagensDoServidor(mensagens){
+    const tudo = document.querySelector(".conteudo");
+
+    for (let i = 0; i< mensagens.length; i++) {
+      if(mensagens[i].type === 'status'){
+          tudo.innerHTML += ` 
+            <div class="caixinhas entrou">
+                <span><span class = "hora">(${mensagens[i].time}) </span><strong>${mensagens[i].from}</strong> entra na sala...</span>
+            </div>`
+      }else if(mensagens[i].type === 'message'){
+        tudo.innerHTML += ` 
+            <div class="caixinhas texto">
+                <span><span class = "hora">(${mensagens[i].time}) </span><strong>${mensagens[i].from}</strong> ${mensagens[i].text} </span>
+            </div>`
+      } else if(mensagens[i].from === nomeInserido || mensagens[i].to === nomeInserido){
+        tudo.innerHTML+= `
+            <div class="caixinhas privada">
+                <span><span class = "hora">(${mensagens[i].time}) </span><strong>${mensagens[i].from}</strong> ${mensagens[i].text} </span>
+            </div>`
+      }
+    }
+
+    
+}
+
+function erroAoPegarMensagens(){
+    alert("Algo deu errado, recarregue a página e tente novamente");
 }

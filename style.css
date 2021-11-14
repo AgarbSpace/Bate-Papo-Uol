@@ -184,7 +184,7 @@ button{
     height: 20.31px;
 }
 
-.mensagemEntraNaSala{
+.caixinhas{
     height: 40px;
 
     display: flex;
@@ -192,32 +192,29 @@ button{
 
     padding-right: 9px;
     padding-left: 8px;
+    margin-bottom: 4px;
+}
 
+.entrou{
     background-color: #DCDCDC;
 }
 
-.mensagem{
-    height: 40px;
-
-    display: flex;
-    align-items: center;
-
-    padding-right: 9px;
-    padding-left: 8px;
-
+.texto{
     background-color: #FFFFFF;
 }
 
-.mensagemPrivada{
-    height: 40px;
-
-    display: flex;
-    align-items: center;
-
-    padding-right: 9px;
-    padding-left: 8px;
-
+.privada{
     background-color: #FFDEDE;
+}
+
+.hora{
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0em;
+    text-align: left;
+
+    color:#AAAAAA
 }
 
 strong{
