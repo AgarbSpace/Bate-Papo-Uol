@@ -16,6 +16,10 @@ function colocaNone(){
     elemento.classList.add("none");
 }
 
+function display(clicado){
+    
+}
+
 function pegarNome(){
     nomeInserido = document.querySelector(".nomeTelaInicial").value;
     const name = {

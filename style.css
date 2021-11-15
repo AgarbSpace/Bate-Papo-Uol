@@ -115,7 +115,19 @@ button{
     position: fixed;
     z-index: 1;
 
+    display: flex;
+
     background-color: rgb(0,0,0, 0.8);
+}
+
+.close{
+    margin-top: 10px;
+    margin-left: 10px;
+
+    width: 40px;
+    height: 40px;
+
+    color: #FFF;
 }
 
 .contatos{
@@ -144,6 +156,18 @@ button{
 
     gap: 18.25px;
     padding-left: 20.34px;
+}
+
+.miniContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.check{
+    margin-right: 27px;
+
+    color: #3FBB25
 }
 
 .flex{

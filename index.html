@@ -18,30 +18,55 @@
         <input class="nomeTelaInicial" type="text" placeholder="Digite seu nome">
         <button onclick="pegarNome()">Entrar</button>
     </main>
-    <section class="none menuContatos" onclick="menuContatosDesaparece()">
+    <section class="none menuContatos">
+        <ion-icon class="close" name="close-sharp" onclick="menuContatosDesaparece()"></ion-icon>
         <div class="contatos">
             <div class="escolha">
                 <strong>Escolha um contato para enviar mensagem:</strong>
             </div>
             <div class="pessoas">
-                <div class="flex">
-                    <ion-icon name="people" class="iconesMenuContatos"></ion-icon>
-                    <strong class="todos">Todos</strong>
+                <div class="miniContainer" onclick="display(this)">
+                    <div class="flex">
+                        <ion-icon name="people" class="iconesMenuContatos"></ion-icon>
+                        <strong class="todos">Todos</strong>
+                    </div>
+                    <ion-icon class="none check" name="checkmark-sharp"></ion-icon>
                 </div>
-                <div class="flex">    
-                    <ion-icon name="people-circle-outline" class="iconesMenuContatos"></ion-icon>
+                <div class="miniContainer" onclick="display(this)">
+                    <div class="flex">
+                        <ion-icon name="person-circle-sharp" class="iconesMenuContatos"></ion-icon>
+                        <strong class="todos">João</strong>
+                    </div>
+                    <ion-icon class="none check" name="checkmark-sharp"></ion-icon>
+                </div>
+                <div class="miniContainer" onclick="display(this)">
+                    <div class="flex">
+                        <ion-icon name="person-circle-sharp" class="iconesMenuContatos"></ion-icon>
+                        <strong class="todos">Maria</strong>
+                    </div>
+                    <ion-icon class="check" name="checkmark-sharp"></ion-icon>
                 </div>
             </div>
             <div class="visibilidade">
                 <strong>Escolha a visibilidade:</strong>
             </div>
             <div class="opcoesVisibilidade">
-                <div class="flex">
-                    <ion-icon name="lock-open" class="iconesMenuContatos"></ion-icon>
+                <div class="miniContainer" onclick="display(this)">
+                    <div class="flex">
+                        <ion-icon name="lock-open" class="iconesMenuContatos"></ion-icon>
+                        <strong class="todos">Público</strong>
+                    </div>
+                    <ion-icon class="none check" name="checkmark-sharp"></ion-icon>
                 </div>
-                <div class="flex">
-                    <ion-icon name="lock-closed" class="iconesMenuContatos"></ion-icon>
+
+                <div class="miniContainer" onclick="display(this)">
+                    <div class="flex">
+                        <ion-icon name="lock-closed" class="iconesMenuContatos"></ion-icon>
+                        <strong class="todos">Reservadamente</strong>
+                    </div>
+                    <ion-icon class="check" name="checkmark-sharp"></ion-icon>
                 </div>
+
             </div>
         </div>
     </section>
