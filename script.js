@@ -1,5 +1,5 @@
 const todasMensagens = [];
-const nomeInserido = "";
+let nomeInserido = "";
 
 function menuContatosAparece(){
     const menuAparece = document.querySelector(".menuContatos");
@@ -17,9 +17,9 @@ function colocaNone(){
 }
 
 function pegarNome(){
-    nomeInserido = document.querySelector(".nomeTelaInicial")
+    nomeInserido = document.querySelector(".nomeTelaInicial").value;
     const name = {
-        name: nomeInserido.value
+        name: nomeInserido
     }
 
     const promessa = axios.post('https://mock-api.driven.com.br/api/v4/uol/participants', name);
@@ -29,16 +29,30 @@ function pegarNome(){
 }
 
 function conexao(){
-   nomeInserido = document.querySelector(".nomeTelaInicial")
+   nomeInserido = document.querySelector(".nomeTelaInicial").value
     const name = {
-        name: nomeInserido.value
+        name: nomeInserido
     }
 
     const promessa = axios.post('https://mock-api.driven.com.br/api/v4/uol/status', name);
+    promessa.catch(desconexao);
 }
 
 function manterConexao(){
     setInterval(conexao, 5000);
+}
+
+function desconexao(){
+    alert("Devido ao tempo ocioso, você foi desconectado do servidor!");
+    const mensagemDesconexao = {
+        from: nomeInserido,
+        to: 'Todos',
+        text: "Saiu da sala...",
+        type: 'message'
+    }
+
+    const promessa = axios.post('https://mock-api.driven.com.br/api/v4/uol/messages', mensagemDesconexao);
+    return promessa;
 }
 
 function autorizaNomeUsuario(resposta){
@@ -62,13 +76,15 @@ function tratarErro(erro){
 function buscarMensagens(){
     const promessa = axios.get('https://mock-api.driven.com.br/api/v4/uol/messages');
 
-    console.log(promessa);
     promessa.then(receberDados);
     promessa.catch(erroAoPegarMensagens);
 }
 
+function atualizarChat(){
+
+}
+
 function receberDados(resposta){
-    console.log(resposta.data);
     mensagensDoServidor(resposta.data);
 }
 
@@ -78,25 +94,57 @@ function mensagensDoServidor(mensagens){
     for (let i = 0; i< mensagens.length; i++) {
       if(mensagens[i].type === 'status'){
           tudo.innerHTML += ` 
-            <div class="caixinhas entrou">
+            <div class="caixinhas entrou" data-identifier="message">
                 <span><span class = "hora">(${mensagens[i].time}) </span><strong>${mensagens[i].from}</strong> entra na sala...</span>
             </div>`
       }else if(mensagens[i].type === 'message'){
         tudo.innerHTML += ` 
-            <div class="caixinhas texto">
+            <div class="caixinhas texto" data-identifier="message">
                 <span><span class = "hora">(${mensagens[i].time}) </span><strong>${mensagens[i].from}</strong> ${mensagens[i].text} </span>
             </div>`
       } else if(mensagens[i].from === nomeInserido || mensagens[i].to === nomeInserido){
         tudo.innerHTML+= `
-            <div class="caixinhas privada">
+            <div class="caixinhas privada" data-identifier="message">
                 <span><span class = "hora">(${mensagens[i].time}) </span><strong>${mensagens[i].from}</strong> ${mensagens[i].text} </span>
             </div>`
+      } else if(mensagens[i].text === "Saiu da Sala..." || desconexao === 200){
+        tudo.innerHTML += ` 
+        <div class="caixinhas entrou" data-identifier="message">
+            <span><span class = "hora">(${mensagens[i].time}) </span><strong>${mensagens[i].from}</strong> Saiu da sala...</span>
+        </div>`
       }
     }
+    scrollMensagem();
+}
 
-    
+function scrollMensagem(){
+    const ultimaMensagem = document.querySelector(".conteudo").lastChild
+    ultimaMensagem.scrollIntoView();
 }
 
 function erroAoPegarMensagens(){
     alert("Algo deu errado, recarregue a página e tente novamente");
+}
+
+function enviarMensagens(){
+    const mensagemInput = document.querySelector(".mensagemDigitada");
+    const mensagemDigitada = {
+        from: nomeInserido,
+        to: 'Todos',
+        text: mensagemInput.value,
+        type: 'message'
+    }
+
+    const promessa = axios.post('https://mock-api.driven.com.br/api/v4/uol/messages', mensagemDigitada);
+    promessa.then(buscarMensagens);
+    promessa.catch(naoFoiPossivelEnviar);
+}
+
+function naoFoiPossivelEnviar(){
+    alert("Mensagem não enviada, você se desconectou");
+    window.location.reload()
+}
+
+function enviou(){
+    alert("mensagem enviada");
 }
