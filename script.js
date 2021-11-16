@@ -51,16 +51,16 @@ function desconexao(){
     const mensagemDesconexao = {
         from: nomeInserido,
         to: 'Todos',
-        text: "Saiu da sala...",
-        type: 'message'
+        text: "sai da sala...",
+        type: 'status'
     }
 
     const promessa = axios.post('https://mock-api.driven.com.br/api/v4/uol/messages', mensagemDesconexao);
+    window.location.reload();
     return promessa;
 }
 
 function autorizaNomeUsuario(resposta){
-    alert("Nome de usuário aceito");
     colocaNone();
     manterConexao();
     buscarMensagens();
@@ -71,7 +71,7 @@ function tratarErro(erro){
     const statusCode = erro.response.status;
 
     if(statusCode === 400){
-        alert("Nome inválido, tente outro");
+        alert("Usuário em uso, tente outro");
         const nomeInserido = document.querySelector(".nomeTelaInicial")
         nomeInserido.value = "";
     }
@@ -84,9 +84,7 @@ function buscarMensagens(){
     promessa.catch(erroAoPegarMensagens);
 }
 
-function atualizarChat(){
-
-}
+setInterval(buscarMensagens,4000);
 
 function receberDados(resposta){
     mensagensDoServidor(resposta.data);
@@ -96,7 +94,7 @@ function mensagensDoServidor(mensagens){
     const tudo = document.querySelector(".conteudo");
 
     for (let i = 0; i< mensagens.length; i++) {
-      if(mensagens[i].type === 'status'){
+      if(mensagens[i].type === 'status' && mensagens[i].text === "entra na sala..."){
           tudo.innerHTML += ` 
             <div class="caixinhas entrou" data-identifier="message">
                 <span><span class = "hora">(${mensagens[i].time}) </span><strong>${mensagens[i].from}</strong> entra na sala...</span>
@@ -106,15 +104,15 @@ function mensagensDoServidor(mensagens){
             <div class="caixinhas texto" data-identifier="message">
                 <span><span class = "hora">(${mensagens[i].time}) </span><strong>${mensagens[i].from}</strong> ${mensagens[i].text} </span>
             </div>`
-      } else if(mensagens[i].from === nomeInserido || mensagens[i].to === nomeInserido){
+      } else if((mensagens[i].from === nomeInserido && mensagens[i].to !== 'Todos') || mensagens[i].to === nomeInserido){
         tudo.innerHTML+= `
             <div class="caixinhas privada" data-identifier="message">
                 <span><span class = "hora">(${mensagens[i].time}) </span><strong>${mensagens[i].from}</strong> ${mensagens[i].text} </span>
             </div>`
-      } else if(mensagens[i].text === "Saiu da Sala..." || desconexao === 200){
+      } else if((mensagens[i].type ==='status' && mensagens[i].text === "sai da sala...") || desconexao === 200){
         tudo.innerHTML += ` 
         <div class="caixinhas entrou" data-identifier="message">
-            <span><span class = "hora">(${mensagens[i].time}) </span><strong>${mensagens[i].from}</strong> Saiu da sala...</span>
+            <span><span class = "hora">(${mensagens[i].time}) </span><strong>${mensagens[i].from}</strong> saiu da sala...</span>
         </div>`
       }
     }
@@ -142,13 +140,10 @@ function enviarMensagens(){
     const promessa = axios.post('https://mock-api.driven.com.br/api/v4/uol/messages', mensagemDigitada);
     promessa.then(buscarMensagens);
     promessa.catch(naoFoiPossivelEnviar);
+    mensagemInput.value = "";
 }
 
 function naoFoiPossivelEnviar(){
     alert("Mensagem não enviada, você se desconectou");
-    window.location.reload()
-}
-
-function enviou(){
-    alert("mensagem enviada");
+    window.location.reload();
 }
